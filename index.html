@@ -342,46 +342,25 @@ async function saveBBS(){
 
 // ---- 投稿 ----
 async function postBBS(){
-    const btn   = document.getElementById('post-btn');
-    const input = document.getElementById('bbs-input');
-    const nameEl= document.getElementById('bbs-name');
-
-    const text  = input.value.trim();
-    const name  = (nameEl.value.trim()||'観測者').slice(0,20);
-
+    const btn=document.getElementById('post-btn');
+    const text=document.getElementById('bbs-input').value.trim();
+    const name=document.getElementById('bbs-name').value.trim()||'観測者';
     setWarn('');
-
-    if(!text){
-        setWarn('⚠ メッセージを入力してください');
-        return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = '送信中...';
-
+    if(!text){setWarn('⚠ メッセージを入力してください');return;}
+    btn.disabled=true;btn.textContent='送信中...';
     try{
-        const res = await fetch("/posts", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, text })
-        });
-
-        const data = await res.json();
-
-        if(data.error){
-            setWarn(data.error);
-        }else{
-            input.value = '';
-            updateCharCount();
-            await loadBBS(); // ←これ超重要
-        }
-
+        const res=await fetch(`${API}/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,name})});
+        const data=await res.json();
+        if(!res.ok){setWarn('🚫 '+data.error);return;}
+        document.getElementById('bbs-input').value='';updateCharCount();
+        await loadBBS();
+        setStatus('✓ 投稿完了','ok');
+        setTimeout(()=>setStatus('● ONLINE','ok'),3000);
     }catch(e){
-        setWarn('接続エラー');
+        setWarn('⚠ 送信に失敗しました');
+    }finally{
+        btn.disabled=false;btn.textContent='投稿';
     }
-
-    btn.disabled = false;
-    btn.textContent = '投稿';
 }
 
 // ---- 描画 ----
