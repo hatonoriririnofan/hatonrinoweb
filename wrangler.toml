@@ -12,4 +12,4 @@ binding = "ASSETS"
 # KVバインディング（掲示板データ保存用）
 [[kv_namespaces]]
 binding = "BBS"
-id = "ここにKVのIDを入れる"
+id = "cb52c0dad6a5473a85d97af3275cebb0"
