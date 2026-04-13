@@ -345,14 +345,25 @@ async function postBBS(){
     const btn   = document.getElementById('post-btn');
     const input = document.getElementById('bbs-input');
     const nameEl= document.getElementById('bbs-name');
+
     const text  = input.value.trim();
     const name  = (nameEl.value.trim()||'観測者').slice(0,20);
-    setWarn('');
+ setWarn('');
 
-    if(!text)                        { setWarn('⚠ メッセージを入力してください'); return; }
+    if(!text){ setWarn('⚠ メッセージを入力してください'); return; }
     if(text.length < 2)              { setWarn('⚠ もう少し長く書いてください'); return; }
     if(text.length > 300)            { setWarn('⚠ 300文字以内で入力してください'); return; }
 
+  btn.disabled=true;
+    btn.textContent='送信中...';
+
+try{
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, text })
+        });
+    
     const now = Date.now();
     if(lastPostAt && now - lastPostAt < POST_COOLDOWN){
         const rem = Math.ceil((POST_COOLDOWN-(now-lastPostAt))/1000);
