@@ -1,131 +1,134 @@
-<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>はとのりの OFFICIAL - 観測宇宙TAIMAポータル</title> <script src="https://cdn.tailwindcss.com"></script> <style> body { background-color: #020617; color: #f8fafc; overflow-x: hidden; font-family: 'Hiragino Kaku Gothic Pro', sans-serif; }
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>はとのりの OFFICIAL - 観測宇宙TAIMAポータル</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+    background-color: #020617;
+    color: #f8fafc;
+    overflow-x: hidden;
+    font-family: 'Hiragino Kaku Gothic Pro', sans-serif;
+}
 .glass {
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .text-gradient {
-        background: linear-gradient(90deg, #22d3ee, #c084fc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    #bg-image {
-        position: fixed;
-        inset: 0;
-        background-image: url('hatonorino.png');
-        background-size: cover;
-        background-position: center;
-        z-index: -1;
-        opacity: 0.15;
-    }
-
-    .tab-content {
-        display: none;
-        animation: fadeIn 0.4s ease forwards;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .nav-btn {
-        padding: 10px 14px;
-        border-radius: 12px;
-        font-weight: bold;
-        transition: 0.3s;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
-
-    @media (min-width: 480px) {
-        .nav-btn { padding: 12px 20px; font-size: 0.9rem; }
-    }
-
-    .nav-btn.active {
-        background: #22d3ee;
-        color: #000;
-        box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
-        border-color: #fff;
-    }
-
-    .bbs-post {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 15px;
-    }
-
-    .bbs-id {
-        color: #22d3ee;
-        font-family: monospace;
-        font-size: 0.8rem;
-    }
-
-    .sns-btn {
-        transition: 0.3s;
-        border-radius: 15px;
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: white;
-        text-align: center;
-    }
-
-    .sns-yt { background: #ff0000; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3); }
-    .sns-x  { background: #000; border: 1px solid #333; }
-    .sns-tw { background: #9146ff; box-shadow: 0 4px 15px rgba(145, 70, 255, 0.3); }
-
-    #bbs-list::-webkit-scrollbar { width: 6px; }
-    #bbs-list::-webkit-scrollbar-thumb { background: #22d3ee; border-radius: 10px; }
-
-    /* ゲームコンテナをスマホでも収まるよう */
-    #game-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #game-container {
-        position: relative;
-        background: rgba(0,0,0,0.9);
-        border: 4px solid rgba(255,255,255,0.1);
-        border-radius: 16px;
-        overflow: hidden;
-        cursor: pointer;
-        /* スマホでは幅を画面に合わせ、高さを比率で保つ */
-        width: 100%;
-        max-width: 600px;
-        aspect-ratio: 600 / 350;
-        margin: 0 auto;
-    }
-
-    #game-canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-
-    #game-msg {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: clamp(1rem, 3vw, 1.5rem);
-        background: rgba(0,0,0,0.5);
-    }
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.text-gradient {
+    background: linear-gradient(90deg, #22d3ee, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#bg-image {
+    position: fixed;
+    inset: 0;
+    background-image: url('hatonorino.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    opacity: 0.15;
+}
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease forwards;
+}
+.tab-content.active {
+    display: block;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.nav-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: bold;
+    transition: 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+@media (min-width: 480px) {
+    .nav-btn { padding: 12px 20px; font-size: 0.9rem; }
+}
+.nav-btn.active {
+    background: #22d3ee;
+    color: #000;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
+    border-color: #fff;
+}
+.bbs-post {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+}
+.bbs-id {
+    color: #22d3ee;
+    font-family: monospace;
+    font-size: 0.8rem;
+}
+.sns-btn {
+    transition: 0.3s;
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+}
+.sns-yt { background: #ff0000; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3); }
+.sns-x  { background: #000; border: 1px solid #333; }
+.sns-tw { background: #9146ff; box-shadow: 0 4px 15px rgba(145, 70, 255, 0.3); }
+#bbs-list::-webkit-scrollbar { width: 6px; }
+#bbs-list::-webkit-scrollbar-thumb { background: #22d3ee; border-radius: 10px; }
+#game-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+#game-container {
+    position: relative;
+    background: rgba(0,0,0,0.9);
+    border: 4px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 600 / 350;
+    margin: 0 auto;
+}
+#game-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+#game-msg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    background: rgba(0,0,0,0.5);
+}
+/* ミュージックボタン アクティブ状態 */
+.music-btn.active {
+    background: #22d3ee !important;
+    color: black !important;
+    box-shadow: 0 0 20px #22d3ee;
+    border-color: #22d3ee !important;
+}
 </style>
-</head> <body>
+</head>
+<body>
+
 <div id="bg-image"></div>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
@@ -154,7 +157,6 @@
             <a href="https://www.twitch.tv/hatono_rino" target="_blank"
                 class="sns-btn sns-tw hover:scale-105">Twitch</a>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div class="glass p-6 sm:p-10 rounded-3xl border-l-8 border-cyan-400">
                 <h2 class="text-2xl sm:text-4xl font-black text-cyan-400 mb-4 sm:mb-6 italic">INFO</h2>
@@ -171,7 +173,6 @@
                 </p>
             </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">01: りのちゃんは概念であり、光だ。</div>
             <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">02: 放銃した時の掠れ声こそ至高のジャズ。</div>
@@ -186,103 +187,36 @@
         </div>
     </div>
 
-   <!-- MUSIC タブ -->
-<div id="music" class="tab-content text-center">
-  <div class="glass w-full max-w-[560px] mx-auto rounded-[30px] sm:rounded-[40px] p-6 sm:p-12 flex flex-col items-center justify-between border-4 border-cyan-500 shadow-2xl gap-6">
+    <!-- MUSIC タブ -->
+    <div id="music" class="tab-content text-center">
+        <div class="glass w-full max-w-[560px] mx-auto rounded-[30px] sm:rounded-[40px] p-6 sm:p-12 flex flex-col items-center justify-between border-4 border-cyan-500 shadow-2xl gap-6">
+            <div class="text-xl sm:text-2xl font-black text-cyan-400 tracking-widest animate-pulse">MONITORING...</div>
+            <img id="p-art" src="hatonorino.png" class="w-48 h-48 sm:w-[280px] sm:h-[280px] rounded-2xl object-cover shadow-2xl">
+            <div id="p-title" class="text-xl sm:text-3xl font-black">STANDBY...</div>
 
-    <div class="text-xl sm:text-2xl font-black text-cyan-400 tracking-widest animate-pulse">
-      MONITORING...
+            <!-- 音源 -->
+            <audio id="audio-rino"  src="銀河の果てまで.mp3" loop></audio>
+            <audio id="audio-osechi" src="おせち.wav" loop></audio>
+            <audio id="audio-new1"  src="song1.mp3" loop></audio>
+            <audio id="audio-new2"  src="song2.mp3" loop></audio>
+            <audio id="audio-new3"  src="song3.mp3" loop></audio>
+
+            <!-- ボタン -->
+            <div class="w-full space-y-4">
+                <button onclick="changeMusic('rino', this)"
+                    class="music-btn w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl transition">🚀 銀河の果てまで</button>
+                <button onclick="changeMusic('osechi', this)"
+                    class="music-btn w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl transition">🍱 おせちBGM</button>
+                <button onclick="changeMusic('new1', this)"
+                    class="music-btn w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl transition">🎧 曲1</button>
+                <button onclick="changeMusic('new2', this)"
+                    class="music-btn w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl transition">🎧 曲2</button>
+                <button onclick="changeMusic('new3', this)"
+                    class="music-btn w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl transition">🎧 曲3</button>
+            </div>
+        </div>
     </div>
 
-    <img id="p-art" src="hatonorino.png"
-      class="w-48 h-48 sm:w-[280px] sm:h-[280px] rounded-2xl object-cover shadow-2xl">
-
-    <div id="p-title" class="text-xl sm:text-3xl font-black">
-      STANDBY...
-    </div>
-
-    <!-- 🎵 音源 -->
-    <audio id="audio-osechi" src="おせち.wav" loop></audio>
-    <audio id="audio-rino" src="銀河の果てまで.mp3" loop></audio>
-    <audio id="audio-new1" src="song1.mp3" loop></audio>
-    <audio id="audio-new2" src="song2.mp3" loop></audio>
-    <audio id="audio-new3" src="song3.mp3" loop></audio>
-
-    <!-- 🎵 ボタン -->
-    <div class="w-full space-y-4">
-      <button onclick="changeMusic('rino', this)" class="music-btn w-full p-4 rounded-2xl bg-white/5 border font-bold">🚀 銀河の果てまで</button>
-      <button onclick="changeMusic('osechi', this)" class="music-btn w-full p-4 rounded-2xl bg-white/5 border font-bold">🍱 おせち</button>
-      <button onclick="changeMusic('new1', this)" class="music-btn w-full p-4 rounded-2xl bg-white/5 border font-bold">🎧 曲1</button>
-      <button onclick="changeMusic('new2', this)" class="music-btn w-full p-4 rounded-2xl bg-white/5 border font-bold">🎧 曲2</button>
-      <button onclick="changeMusic('new3', this)" class="music-btn w-full p-4 rounded-2xl bg-white/5 border font-bold">🎧 曲3</button>
-    </div>
-
-  </div>
-</div>
-
-<script>
-const audios = {
-  rino: document.getElementById('audio-rino'),
-  osechi: document.getElementById('audio-osechi'),
-  new1: document.getElementById('audio-new1'),
-  new2: document.getElementById('audio-new2'),
-  new3: document.getElementById('audio-new3')
-};
-
-let currentAudio = null;
-
-function changeMusic(type, btn) {
-
-  // ボタン光る
-  document.querySelectorAll('.music-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  const next = audios[type];
-
-  // フェードアウト
-  if (currentAudio) {
-    let v = currentAudio.volume;
-    const fadeOut = setInterval(() => {
-      if (v > 0.05) {
-        v -= 0.05;
-        currentAudio.volume = v;
-      } else {
-        clearInterval(fadeOut);
-        currentAudio.pause();
-      }
-    }, 30);
-  }
-
-  // 再生
-  next.volume = 0;
-  next.currentTime = 0;
-  next.play().catch(()=>{});
-
-  // フェードイン
-  let v2 = 0;
-  const fadeIn = setInterval(() => {
-    if (v2 < 0.95) {
-      v2 += 0.05;
-      next.volume = v2;
-    } else {
-      clearInterval(fadeIn);
-    }
-  }, 30);
-
-  currentAudio = next;
-
-  // 表示
-  document.getElementById('p-title').innerText = "NOW PLAYING";
-}
-</script>
-
-<style>
-.music-btn.active {
-  background: #22d3ee;
-  color: black;
-  box-shadow: 0 0 20px #22d3ee;
-}
-</style>
     <!-- GAME タブ -->
     <div id="game" class="tab-content text-center">
         <div class="glass p-4 sm:p-10 rounded-3xl inline-block border-2 border-cyan-500 w-full max-w-[660px]">
@@ -325,6 +259,7 @@ function changeMusic(type, btn) {
 </div>
 
 <script>
+    // ========== タブ切り替え ==========
     function showTab(id) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -334,21 +269,79 @@ function changeMusic(type, btn) {
         else stopGame();
     }
 
-    const oAudio = document.getElementById('audio-osechi');
-    const rAudio = document.getElementById('audio-rino');
-    function changeMusic(t) {
-        oAudio.pause(); rAudio.pause();
-        if (t === 'rino') {
-            rAudio.play().catch(e => console.log("Audio play blocked"));
-            document.getElementById('p-art').src = 'rino.png';
-            document.getElementById('p-title').innerText = 'NOW: 銀河の果てまで';
-        } else {
-            oAudio.play().catch(e => console.log("Audio play blocked"));
-            document.getElementById('p-art').src = 'IMG_5850.jpg';
-            document.getElementById('p-title').innerText = 'NOW: おせち';
+    // ========== MUSIC ==========
+    const audioMap = {
+        rino:   document.getElementById('audio-rino'),
+        osechi: document.getElementById('audio-osechi'),
+        new1:   document.getElementById('audio-new1'),
+        new2:   document.getElementById('audio-new2'),
+        new3:   document.getElementById('audio-new3')
+    };
+    const titleMap = {
+        rino:   '銀河の果てまで',
+        osechi: 'おせちBGM',
+        new1:   '曲1',
+        new2:   '曲2',
+        new3:    '曲3'
+    };
+    const artMap = {
+        rino:   'rino.png',
+        osechi: 'IMG_5850.jpg',
+        new1:   'hatonorino.png',
+        new2:   'hatonorino.png',
+        new3:   'hatonorino.png'
+    };
+
+    let currentAudio = null;
+
+    function changeMusic(type, btn) {
+        // ボタンのアクティブ状態を更新
+        document.querySelectorAll('.music-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        const next = audioMap[type];
+        if (!next) return;
+
+        // フェードアウト
+        if (currentAudio && currentAudio !== next) {
+            const dying = currentAudio;
+            let v = dying.volume;
+            const fadeOut = setInterval(() => {
+                if (v > 0.05) {
+                    v -= 0.05;
+                    dying.volume = v;
+                } else {
+                    clearInterval(fadeOut);
+                    dying.pause();
+                    dying.volume = 1;
+                }
+            }, 30);
         }
+
+        // フェードイン
+        next.volume = 0;
+        next.currentTime = 0;
+        next.play().catch(() => {});
+        let v2 = 0;
+        const fadeIn = setInterval(() => {
+            if (v2 < 0.95) {
+                v2 += 0.05;
+                next.volume = v2;
+            } else {
+                clearInterval(fadeIn);
+                next.volume = 1;
+            }
+        }, 30);
+
+        currentAudio = next;
+
+        // 表示更新
+        document.getElementById('p-title').innerText = 'NOW: ' + (titleMap[type] || type);
+        const art = artMap[type] || 'hatonorino.png';
+        document.getElementById('p-art').src = art;
     }
 
+    // ========== GAME ==========
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d');
     let gameActive = false,
@@ -426,7 +419,9 @@ function changeMusic(type, btn) {
         }
     });
 
+    // ========== BBS ==========
     const bl = document.getElementById('bbs-list');
+
     function postBBS() {
         const v = document.getElementById('bbs-input').value.trim();
         if (!v) return;
@@ -457,4 +452,5 @@ function changeMusic(type, btn) {
     renderBBS();
     resetGameUI();
 </script>
-</body> </html>
+</body>
+</html>
