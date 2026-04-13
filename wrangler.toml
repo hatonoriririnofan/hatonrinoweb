@@ -3,13 +3,12 @@ main = "worker.js"
 compatibility_date = "2026-04-13"
 compatibility_flags = ["nodejs_compat"]
 account_id = "7fbf3fb07f07881c9aaa70befc0c5da0"
+workers_dev = true
 
-# 静的ファイル（index.htmlなど）の配信設定
 [assets]
 directory = "./"
 binding = "ASSETS"
 
-# KVバインディング（掲示板データ保存用）
 [[kv_namespaces]]
 binding = "BBS"
 id = "cb52c0dad6a5473a85d97af3275cebb0"
