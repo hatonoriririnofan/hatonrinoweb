@@ -349,7 +349,7 @@ async function postBBS(){
     if(!text){setWarn('⚠ メッセージを入力してください');return;}
     btn.disabled=true;btn.textContent='送信中...';
     try{
-        const res=await fetch(`${API}/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,name})});
+ const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,name})});
         const data=await res.json();
         if(!res.ok){setWarn('🚫 '+data.error);return;}
         document.getElementById('bbs-input').value='';updateCharCount();
