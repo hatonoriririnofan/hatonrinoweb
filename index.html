@@ -259,6 +259,8 @@ body.admin-mode .ng-post { opacity: 1; filter: none; }
 </div>
 
 <script>
+const API_URL = "/posts"; // ← ★ここに追加
+    
 // ===== タブ =====
 function showTab(id){
     document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
