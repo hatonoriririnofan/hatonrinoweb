@@ -323,15 +323,13 @@ function updateCharCount(){const v=document.getElementById('bbs-input').value.le
 async function loadBBS(){
     setStatus('受信中...','load');
     try {
-        const r = await window.storage.get(BBS_KEY, true);
-        bbsPosts = (r && r.value) ? JSON.parse(r.value) : [];
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        bbsPosts = data.posts || [];
         renderBBS();
         setStatus('● ONLINE','ok');
     } catch(e) {
-        // fallback: localStorage
-        bbsPosts = JSON.parse(localStorage.getItem(BBS_KEY)||'[]');
-        renderBBS();
-        setStatus('ローカルモード','warn');
+        setStatus('接続エラー','err');
     }
 }
 
