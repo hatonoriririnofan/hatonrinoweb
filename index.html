@@ -348,55 +348,40 @@ async function postBBS(){
 
     const text  = input.value.trim();
     const name  = (nameEl.value.trim()||'観測者').slice(0,20);
- setWarn('');
 
-    if(!text){ setWarn('⚠ メッセージを入力してください'); return; }
-    if(text.length < 2)              { setWarn('⚠ もう少し長く書いてください'); return; }
-    if(text.length > 300)            { setWarn('⚠ 300文字以内で入力してください'); return; }
+    setWarn('');
 
-  btn.disabled=true;
-    btn.textContent='送信中...';
+    if(!text){
+        setWarn('⚠ メッセージを入力してください');
+        return;
+    }
 
-try{
-        const res = await fetch(API_URL, {
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    try{
+        const res = await fetch("/posts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, text })
         });
-    
-    const now = Date.now();
-    if(lastPostAt && now - lastPostAt < POST_COOLDOWN){
-        const rem = Math.ceil((POST_COOLDOWN-(now-lastPostAt))/1000);
-        setWarn(`⏳ 連投防止: あと ${rem} 秒待ってください`); return;
+
+        const data = await res.json();
+
+        if(data.error){
+            setWarn(data.error);
+        }else{
+            input.value = '';
+            updateCharCount();
+            await loadBBS(); // ←これ超重要
+        }
+
+    }catch(e){
+        setWarn('接続エラー');
     }
 
-    const lc = text.toLowerCase();
-    if(NG_WORDS.some(w=>lc.includes(w))) { setWarn('🚫 その内容は投稿できません'); return; }
-
-    // 直近3件に同じテキストがあれば拒否
-    if(bbsPosts.slice(0,3).some(p=>p.t===text)) { setWarn('🚫 同じ内容の連続投稿はできません'); return; }
-
-    btn.disabled=true; btn.textContent='送信中...';
-
-    // 最新データを取得してからマージ（競合防止）
-    try { const r=await window.storage.get(BBS_KEY,true); if(r&&r.value) bbsPosts=JSON.parse(r.value); } catch(e){}
-
-    const entry = {
-        id:   Math.random().toString(36).slice(2,10),
-        n:    name,
-        t:    text,
-        d:    new Date().toLocaleString('ja-JP'),
-        ts:   now,
-        ng:   false
-    };
-    bbsPosts.unshift(entry);
-    await saveBBS();
-    lastPostAt = now;
-    input.value=''; updateCharCount();
-    btn.disabled=false; btn.textContent='投稿';
-    renderBBS();
-    setStatus('✓ 投稿完了','ok');
-    setTimeout(()=>setStatus('● ONLINE','ok'),3000);
+    btn.disabled = false;
+    btn.textContent = '投稿';
 }
 
 // ---- 描画 ----
