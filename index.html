@@ -1,0 +1,380 @@
+<!DOCTYPE html> <html lang="ja"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <title>はとのりの OFFICIAL - 観測宇宙TAIMAポータル</title> <script src="https://cdn.tailwindcss.com"></script> <style> body { background-color: #020617; color: #f8fafc; overflow-x: hidden; font-family: 'Hiragino Kaku Gothic Pro', sans-serif; }
+.glass {
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #22d3ee, #c084fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    #bg-image {
+        position: fixed;
+        inset: 0;
+        background-image: url('hatonorino.png');
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        opacity: 0.15;
+    }
+
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.4s ease forwards;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nav-btn {
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: bold;
+        transition: 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    @media (min-width: 480px) {
+        .nav-btn { padding: 12px 20px; font-size: 0.9rem; }
+    }
+
+    .nav-btn.active {
+        background: #22d3ee;
+        color: #000;
+        box-shadow: 0 0 25px rgba(34, 211, 238, 0.6);
+        border-color: #fff;
+    }
+
+    .bbs-post {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 15px;
+    }
+
+    .bbs-id {
+        color: #22d3ee;
+        font-family: monospace;
+        font-size: 0.8rem;
+    }
+
+    .sns-btn {
+        transition: 0.3s;
+        border-radius: 15px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+    }
+
+    .sns-yt { background: #ff0000; box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3); }
+    .sns-x  { background: #000; border: 1px solid #333; }
+    .sns-tw { background: #9146ff; box-shadow: 0 4px 15px rgba(145, 70, 255, 0.3); }
+
+    #bbs-list::-webkit-scrollbar { width: 6px; }
+    #bbs-list::-webkit-scrollbar-thumb { background: #22d3ee; border-radius: 10px; }
+
+    /* ゲームコンテナをスマホでも収まるよう */
+    #game-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #game-container {
+        position: relative;
+        background: rgba(0,0,0,0.9);
+        border: 4px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        /* スマホでは幅を画面に合わせ、高さを比率で保つ */
+        width: 100%;
+        max-width: 600px;
+        aspect-ratio: 600 / 350;
+        margin: 0 auto;
+    }
+
+    #game-canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    #game-msg {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: clamp(1rem, 3vw, 1.5rem);
+        background: rgba(0,0,0,0.5);
+    }
+</style>
+</head> <body>
+<div id="bg-image"></div>
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
+
+    <!-- ヘッダー -->
+    <header class="text-center mb-8 sm:mb-10">
+        <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-gradient italic tracking-tighter">RINO HATONO</h1>
+        <p class="text-cyan-400 font-bold tracking-[0.4em] sm:tracking-[0.8em] mt-2 uppercase text-xs">Absolute Observation Hub</p>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="glass p-2 sm:p-3 rounded-2xl flex justify-center gap-2 sm:gap-4 mb-8 sm:mb-12 sticky top-2 z-50 flex-wrap">
+        <button onclick="showTab('home')" id="btn-home" class="nav-btn active">🏠 PROFILE</button>
+        <button onclick="showTab('music')" id="btn-music" class="nav-btn">🎵 MUSIC</button>
+        <button onclick="showTab('game')" id="btn-game" class="nav-btn">🎮 GAME</button>
+        <button onclick="showTab('bbs')" id="btn-bbs" class="nav-btn">📝 BBS</button>
+    </nav>
+
+    <!-- HOME タブ -->
+    <div id="home" class="tab-content active space-y-6 sm:space-y-10">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <a href="https://www.youtube.com/channel/UCLVUwjDKEVyNAwHnBcc_EVw" target="_blank"
+                class="sns-btn sns-yt hover:scale-105">YouTube</a>
+            <a href="https://x.com/Hatono_Rino" target="_blank"
+                class="sns-btn sns-x hover:scale-105">X (Twitter)</a>
+            <a href="https://www.twitch.tv/hatono_rino" target="_blank"
+                class="sns-btn sns-tw hover:scale-105">Twitch</a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div class="glass p-6 sm:p-10 rounded-3xl border-l-8 border-cyan-400">
+                <h2 class="text-2xl sm:text-4xl font-black text-cyan-400 mb-4 sm:mb-6 italic">INFO</h2>
+                <p class="text-base sm:text-xl leading-relaxed">
+                    <span class="text-cyan-300">種族：</span> ハト型VTuber<br>
+                    <span class="text-cyan-300">好物：</span> 競馬・役満・ガソリン・鳩<br>
+                    <span class="text-cyan-300">座右の銘：</span> 領域展開「自閉円頓裹」リスナーをやくちゅーにしちゃうぞ!!「呪力は黒く光る」黒閃!!!
+                </p>
+            </div>
+            <div class="glass p-6 sm:p-10 rounded-3xl border-l-8 border-purple-500">
+                <h2 class="text-2xl sm:text-4xl font-black text-purple-400 mb-4 sm:mb-6 italic">STATUS</h2>
+                <p class="text-sm sm:text-lg">
+                    本日のりのちゃんは非常に「鳴き」が鋭い。雀魂での打牌速度は光速を超えている。まるでピカチュウ<strong>にゃはは。</strong>
+                </p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">01: りのちゃんは概念であり、光だ。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">02: 放銃した時の掠れ声こそ至高のジャズ。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">03: ガソリンの香りとはとのりのの吐息は同期している。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">04: 赤甲羅に轢かれる不条理を愛せ。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">05: 3時間前の待機は観測者の礼儀。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">06: マイクラの砂利を踏む音は子守唄。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">07: メンシのバッジは魂の刻印だ。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">08: ロンにゃ。その一言で世界は救われる。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">09: 睡眠中も彼女のアーカイブを幻聴せよ。</div>
+            <div class="glass p-3 sm:p-4 rounded-xl text-xs italic border border-white/5 hover:border-cyan-500 transition">10: 永遠に観測し、永遠に愛でる。にゃはは。</div>
+        </div>
+    </div>
+
+    <!-- MUSIC タブ -->
+    <div id="music" class="tab-content text-center">
+        <div class="glass w-full max-w-[560px] mx-auto rounded-[30px] sm:rounded-[40px] p-6 sm:p-12 flex flex-col items-center justify-between border-4 border-cyan-500 shadow-2xl gap-6">
+            <div class="text-xl sm:text-2xl font-black text-cyan-400 tracking-widest animate-pulse">MONITORING...</div>
+            <img id="p-art" src="hatonorino.png" class="w-48 h-48 sm:w-[280px] sm:h-[280px] rounded-2xl object-cover shadow-2xl">
+            <div id="p-title" class="text-xl sm:text-3xl font-black">STANDBY...</div>
+            <audio id="audio-osechi" src="おせち.wav" loop></audio>
+            <audio id="audio-rino" src="銀河の果てまで.mp3"  loop></audio>
+            <div class="w-full space-y-4">
+                <button onclick="changeMusic('rino')"
+                    class="w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl hover:bg-cyan-500 hover:text-black transition">🚀 銀河の果てまで</button>
+                <button onclick="changeMusic('osechi')"
+                    class="w-full p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 font-bold text-base sm:text-xl hover:bg-cyan-500 hover:text-black transition">🍱 おせちBGM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME タブ -->
+    <div id="game" class="tab-content text-center">
+        <div class="glass p-4 sm:p-10 rounded-3xl inline-block border-2 border-cyan-500 w-full max-w-[660px]">
+            <h2 class="text-2xl sm:text-4xl font-black mb-4 sm:mb-6 text-gradient italic">FLY! RINO-HATO</h2>
+            <div id="game-wrapper">
+                <div id="game-container" onclick="jumpBird()">
+                    <canvas id="game-canvas" width="600" height="350"></canvas>
+                    <div id="game-msg">
+                        <span class="text-cyan-400">TAP TO START</span>
+                        <span id="game-score-display" class="text-white text-sm mt-4">Score: 0</span>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-4 sm:mt-6 text-cyan-400 font-bold italic underline text-sm sm:text-base">SPACE KEY / TAP TO JUMP</p>
+        </div>
+    </div>
+
+    <!-- BBS タブ -->
+    <div id="bbs" class="tab-content">
+        <div class="glass p-5 sm:p-8 rounded-3xl max-w-4xl mx-auto border-t-8 border-cyan-400">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-6 sm:mb-8 border-b border-white/20 pb-4 gap-2">
+                <h2 class="text-xl sm:text-4xl font-black text-cyan-400 italic">鳩の足から黒閃掲示板 (BBS)</h2>
+                <span class="text-xs text-gray-500 italic">Connected to RINO-NET</span>
+            </div>
+            <div class="bg-white/5 p-4 sm:p-6 rounded-2xl mb-6 sm:mb-10 border border-white/10">
+                <p class="text-sm font-bold text-cyan-300 mb-2 italic">＞＞新規書き込み</p>
+                <div class="flex flex-col gap-4">
+                    <textarea id="bbs-input"
+                        class="w-full bg-black/50 border border-white/20 rounded-xl p-4 text-white outline-none focus:border-cyan-400 h-24"
+                        placeholder="メッセージを入力..."></textarea>
+                    <button onclick="postBBS()"
+                        class="w-full sm:w-auto sm:self-end bg-cyan-500 text-black font-black px-10 py-3 rounded-xl hover:bg-white transition duration-300">投稿</button>
+                </div>
+            </div>
+            <div id="bbs-list"
+                class="space-y-0 bg-black/20 rounded-2xl border border-white/5 max-h-[500px] sm:max-h-[600px] overflow-y-auto"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('btn-' + id).classList.add('active');
+        if (id === 'game') resetGameUI();
+        else stopGame();
+    }
+
+    const oAudio = document.getElementById('audio-osechi');
+    const rAudio = document.getElementById('audio-rino');
+    function changeMusic(t) {
+        oAudio.pause(); rAudio.pause();
+        if (t === 'rino') {
+            rAudio.play().catch(e => console.log("Audio play blocked"));
+            document.getElementById('p-art').src = 'rino.png';
+            document.getElementById('p-title').innerText = 'NOW: 銀河の果てまで';
+        } else {
+            oAudio.play().catch(e => console.log("Audio play blocked"));
+            document.getElementById('p-art').src = 'IMG_5850.jpg';
+            document.getElementById('p-title').innerText = 'NOW: おせち';
+        }
+    }
+
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    let gameActive = false,
+        bird = { x: 80, y: 280, dy: 0, gravity: 0.8, jumpPower: -11 },
+        obstacles = [],
+        frame = 0,
+        score = 0,
+        animationId = null;
+
+    function resetGameUI() {
+        stopGame();
+        bird = { x: 80, y: 280, dy: 0, gravity: 0.8, jumpPower: -11 };
+        const msg = document.getElementById('game-msg');
+        msg.style.opacity = "1";
+        msg.innerHTML = `<span class="text-cyan-400">TAP TO START</span><span id="game-score-display" class="text-white text-sm mt-4">Score: 0</span>`;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = "40px serif";
+        ctx.fillText("🕊️", bird.x, bird.y);
+    }
+
+    function startGame() {
+        if (!gameActive) {
+            bird.y = 280; bird.dy = 0; obstacles = []; score = 0; frame = 0;
+            gameActive = true;
+            document.getElementById('game-msg').style.opacity = "0";
+            loop();
+        }
+    }
+
+    function stopGame() {
+        gameActive = false;
+        if (animationId) cancelAnimationFrame(animationId);
+    }
+
+    function jumpBird() {
+        if (!gameActive) startGame();
+        else bird.dy = bird.jumpPower;
+    }
+
+    function loop() {
+        if (!gameActive) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        bird.dy += bird.gravity;
+        bird.y += bird.dy;
+        if (bird.y > 310) { bird.y = 310; bird.dy = 0; }
+        if (bird.y < 0) { bird.y = 0; bird.dy = 0; }
+        ctx.font = "40px serif";
+        ctx.fillText("🕊️", bird.x, bird.y);
+        if (frame % 75 === 0) obstacles.push({ x: 600, t: Math.random() > 0.5 ? '🐢' : '🀄' });
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            let ob = obstacles[i];
+            ob.x -= (6 + Math.floor(score / 8));
+            ctx.fillText(ob.t, ob.x, 310);
+            if (ob.x < bird.x + 30 && ob.x + 20 > bird.x && bird.y > 270) {
+                gameActive = false;
+                const msg = document.getElementById('game-msg');
+                msg.style.opacity = "1";
+                msg.innerHTML = `<span class="text-red-500 text-2xl">CRASHED!</span><span class="text-sm mt-2">SCORE: ${score}</span><br><span class="text-xs mt-1">TAP OR SPACE TO RETRY</span>`;
+            }
+            if (ob.x < -40) {
+                obstacles.splice(i, 1);
+                score++;
+                const sd = document.getElementById('game-score-display');
+                if (sd) sd.innerText = "Score: " + score;
+            }
+        }
+        frame++;
+        if (gameActive) animationId = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            const activeTab = document.querySelector('.tab-content.active').id;
+            if (activeTab === 'game') { e.preventDefault(); jumpBird(); }
+        }
+    });
+
+    const bl = document.getElementById('bbs-list');
+    function postBBS() {
+        const v = document.getElementById('bbs-input').value.trim();
+        if (!v) return;
+        const id = Math.random().toString(16).slice(2, 10);
+        let m = JSON.parse(localStorage.getItem('rbbs') || '[]');
+        m.unshift({ t: v, d: new Date().toLocaleString(), id: id });
+        localStorage.setItem('rbbs', JSON.stringify(m.slice(0, 50)));
+        renderBBS();
+        document.getElementById('bbs-input').value = '';
+    }
+
+    function renderBBS() {
+        const m = JSON.parse(localStorage.getItem('rbbs') || '[]');
+        if (m.length === 0) {
+            bl.innerHTML = `<div class="p-10 text-center text-gray-500 italic">...No signals...</div>`;
+            return;
+        }
+        bl.innerHTML = m.map((i, index) => `
+            <div class="bbs-post hover:bg-white/5 transition">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="bbs-id">#${m.length - index} ID:${i.id}</span>
+                    <span class="text-[10px] opacity-40">${i.d}</span>
+                </div>
+                <div class="text-white pl-4 border-l-2 border-cyan-500/30 ml-2 whitespace-pre-wrap font-bold">${i.t}</div>
+            </div>`).join('');
+    }
+
+    renderBBS();
+    resetGameUI();
+</script>
+</body> </html>
