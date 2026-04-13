@@ -67,14 +67,13 @@ class="w-48 h-48 mx-auto mb-4 rounded-xl object-cover">
 <audio id="audio-kami" src="kami.mp3" loop></audio>
 
 <div class="space-y-3 max-w-md mx-auto">
-
 <button onclick="changeMusic('rino')" class="music-btn">🚀 銀河の果てまで</button>
 <button onclick="changeMusic('osechi')" class="music-btn">🍱 おせち</button>
 <button onclick="changeMusic('kokusen')" class="music-btn">⚡ 黒閃</button>
 <button onclick="changeMusic('ron')" class="music-btn">🀄 ロン</button>
 <button onclick="changeMusic('kami')" class="music-btn">✨ 神</button>
-
 </div>
+
 </div>
 
 <script>
@@ -86,13 +85,16 @@ document.getElementById(id).classList.add('active');
 document.getElementById('btn-'+id).classList.add('active');
 }
 
-// 🎧 曲データ
+// 安全取得関数
+const get = id => document.getElementById(id);
+
+// 🎧 曲データ（修正版）
 const musicData = {
-rino:{ audio:audio_rino, img:'hatonorino.png', title:'銀河の果てまで' },
-osechi:{ audio:audio_osechi, img:'IMG_5850.jpg', title:'おせち' },
-kokusen:{ audio:audio_kokusen, img:'kokusen.png', title:'黒閃' },
-ron:{ audio:audio_ron, img:'ron.png', title:'ロン' },
-kami:{ audio:audio_kami, img:'kami.jpg', title:'神' }
+rino:{ audio:get('audio-rino'), img:'hatonorino.png', title:'銀河の果てまで' },
+osechi:{ audio:get('audio-osechi'), img:'IMG_5850.jpg', title:'おせち' },
+kokusen:{ audio:get('audio-kokusen'), img:'kokusen.png', title:'黒閃' },
+ron:{ audio:get('audio-ron'), img:'ron.png', title:'ロン' },
+kami:{ audio:get('audio-kami'), img:'kami.jpg', title:'神' }
 };
 
 let currentAudio = null;
@@ -143,13 +145,14 @@ function updateActiveButton(key){
 document.querySelectorAll('.music-btn').forEach(btn=>{
 btn.classList.remove('active');
 });
-document.querySelector(`[onclick="changeMusic('${key}')"]`)
-.classList.add('active');
+const btn = document.querySelector(`[onclick="changeMusic('${key}')"]`);
+if(btn) btn.classList.add('active');
 }
 
 // 🎧 曲切替
 async function changeMusic(key){
 const next=musicData[key];
+if(!next) return;
 if(currentKey===key) return;
 
 await fadeOut(currentAudio);
@@ -165,12 +168,12 @@ currentKey=key;
 updateActiveButton(key);
 }
 
-// 自動再生トライ
+// 初期表示
 window.addEventListener('load',()=>{
 changeMusic('rino');
 });
 
-// スマホ対策（最初のタップで再生）
+// スマホ対策
 document.addEventListener('click',()=>{
 if(currentAudio && currentAudio.paused){
 currentAudio.play().catch(()=>{});
