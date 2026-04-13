@@ -4,35 +4,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RINO PLAYER</title>
+<title>はとのりの OFFICIAL</title>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-body { background:#020617; color:#fff; font-family:sans-serif; }
+body {
+    background-color:#020617;
+    color:#f8fafc;
+    font-family:'Hiragino Kaku Gothic Pro',sans-serif;
+}
+
+/* 背景 */
+#bg-image{
+    position:fixed;
+    inset:0;
+    background-image:url('hatonorino.png');
+    background-size:cover;
+    background-position:center;
+    opacity:0.15;
+    z-index:-1;
+}
+
+/* ガラス */
+.glass{
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.1);
+}
 
 /* タブ */
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-.nav-btn.active{background:#22d3ee;color:#000;}
-
-/* ボタン */
-.music-btn {
-    width:100%;
-    padding:12px;
-    border-radius:12px;
-    background:#0f172a;
-    border:1px solid #334155;
-    transition:all 0.3s;
-}
-
-.music-btn:hover {
-    background:#1e293b;
-}
-
-.music-btn.active {
+.nav-btn.active{
     background:#22d3ee;
     color:#000;
-    box-shadow:0 0 20px #22d3ee, 0 0 40px #22d3ee;
+}
+
+/* 音楽ボタン */
+.music-btn{
+    width:100%;
+    padding:16px;
+    border-radius:16px;
+    background:#0f172a;
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.3s;
+}
+
+.music-btn:hover{
+    background:#22d3ee;
+    color:#000;
+}
+
+.music-btn.active{
+    background:#22d3ee;
+    color:#000;
+    box-shadow:0 0 20px #22d3ee,0 0 40px #22d3ee;
     transform:scale(1.05);
 }
 </style>
@@ -40,44 +66,63 @@ body { background:#020617; color:#fff; font-family:sans-serif; }
 
 <body>
 
-<!-- ナビ -->
-<div class="p-4 flex gap-2">
-<button onclick="showTab('home')" class="nav-btn active" id="btn-home">HOME</button>
-<button onclick="showTab('music')" class="nav-btn" id="btn-music">MUSIC</button>
-</div>
+<div id="bg-image"></div>
+
+<div class="max-w-5xl mx-auto p-6">
+
+<header class="text-center mb-8">
+<h1 class="text-5xl font-black text-cyan-400">RINO HATONO</h1>
+</header>
+
+<nav class="flex gap-2 justify-center mb-6">
+<button onclick="showTab('home')" id="btn-home" class="nav-btn active">HOME</button>
+<button onclick="showTab('music')" id="btn-music" class="nav-btn">MUSIC</button>
+</nav>
 
 <!-- HOME -->
-<div id="home" class="tab-content active p-6">
-<h1 class="text-2xl">RINO PLAYER</h1>
+<div id="home" class="tab-content active">
+<div class="glass p-6 rounded-xl text-center">
+<p>観測宇宙TAIMAポータルへようこそ</p>
+</div>
 </div>
 
 <!-- MUSIC -->
-<div id="music" class="tab-content p-6 text-center">
+<div id="music" class="tab-content text-center">
+
+<div class="glass p-8 rounded-3xl max-w-md mx-auto space-y-6">
+
+<div class="text-xl text-cyan-400">MONITORING...</div>
 
 <img id="p-art" src="hatonorino.png"
-class="w-48 h-48 mx-auto mb-4 rounded-xl object-cover">
+class="w-60 h-60 mx-auto rounded-xl object-cover">
 
-<div id="p-title" class="text-xl mb-4">STANDBY...</div>
+<div id="p-title" class="text-2xl font-bold">STANDBY...</div>
 
-<!-- 🎧 audio -->
+<!-- audio -->
 <audio id="audio-rino" src="銀河の果てまで.mp3" loop></audio>
 <audio id="audio-osechi" src="おせち.wav" loop></audio>
 <audio id="audio-kokusen" src="kokusen.mp3" loop></audio>
 <audio id="audio-ron" src="ron.mp3" loop></audio>
 <audio id="audio-kami" src="kami.mp3" loop></audio>
 
-<div class="space-y-3 max-w-md mx-auto">
+<div class="space-y-3">
+
 <button onclick="changeMusic('rino')" class="music-btn">🚀 銀河の果てまで</button>
 <button onclick="changeMusic('osechi')" class="music-btn">🍱 おせち</button>
 <button onclick="changeMusic('kokusen')" class="music-btn">⚡ 黒閃</button>
 <button onclick="changeMusic('ron')" class="music-btn">🀄 ロン</button>
 <button onclick="changeMusic('kami')" class="music-btn">✨ 神</button>
+
+</div>
+
+</div>
 </div>
 
 </div>
 
 <script>
-// タブ切替
+
+// タブ
 function showTab(id){
 document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
 document.querySelectorAll('.nav-btn').forEach(el=>el.classList.remove('active'));
@@ -85,80 +130,63 @@ document.getElementById(id).classList.add('active');
 document.getElementById('btn-'+id).classList.add('active');
 }
 
-// 安全取得関数
-const get = id => document.getElementById(id);
+const get=id=>document.getElementById(id);
 
-// 🎧 曲データ（修正版）
-const musicData = {
-rino:{ audio:get('audio-rino'), img:'hatonorino.png', title:'銀河の果てまで' },
-osechi:{ audio:get('audio-osechi'), img:'IMG_5850.jpg', title:'おせち' },
-kokusen:{ audio:get('audio-kokusen'), img:'kokusen.png', title:'黒閃' },
-ron:{ audio:get('audio-ron'), img:'ron.png', title:'ロン' },
-kami:{ audio:get('audio-kami'), img:'kami.jpg', title:'神' }
+// 曲データ
+const musicData={
+rino:{audio:get('audio-rino'),img:'hatonorino.png',title:'銀河の果てまで'},
+osechi:{audio:get('audio-osechi'),img:'IMG_5850.jpg',title:'おせち'},
+kokusen:{audio:get('audio-kokusen'),img:'kokusen.png',title:'黒閃'},
+ron:{audio:get('audio-ron'),img:'ron.png',title:'ロン'},
+kami:{audio:get('audio-kami'),img:'kami.jpg',title:'神'}
 };
 
-let currentAudio = null;
-let currentKey = null;
+let currentAudio=null;
+let currentKey=null;
 
-// フェードアウト
-function fadeOut(audio, duration=500){
-return new Promise(resolve=>{
-if(!audio) return resolve();
-let vol=audio.volume;
-const step=vol/(duration/50);
-
-const fade=setInterval(()=>{
-vol-=step;
-if(vol<=0){
-audio.volume=0;
-audio.pause();
-clearInterval(fade);
-resolve();
-}else{
-audio.volume=vol;
-}
+// フェード
+function fadeOut(audio,d=500){
+return new Promise(r=>{
+if(!audio)return r();
+let v=audio.volume;
+let s=v/(d/50);
+let i=setInterval(()=>{
+v-=s;
+if(v<=0){audio.volume=0;audio.pause();clearInterval(i);r();}
+else audio.volume=v;
 },50);
 });
 }
 
-// フェードイン
-function fadeIn(audio, duration=500){
+function fadeIn(audio,d=500){
 audio.volume=0;
 audio.play().catch(()=>{});
-
-let vol=0;
-const step=1/(duration/50);
-
-const fade=setInterval(()=>{
-vol+=step;
-if(vol>=1){
-audio.volume=1;
-clearInterval(fade);
-}else{
-audio.volume=vol;
-}
+let v=0;
+let s=1/(d/50);
+let i=setInterval(()=>{
+v+=s;
+if(v>=1){audio.volume=1;clearInterval(i);}
+else audio.volume=v;
 },50);
 }
 
 // ボタン発光
 function updateActiveButton(key){
-document.querySelectorAll('.music-btn').forEach(btn=>{
-btn.classList.remove('active');
-});
-const btn = document.querySelector(`[onclick="changeMusic('${key}')"]`);
-if(btn) btn.classList.add('active');
+document.querySelectorAll('.music-btn').forEach(b=>b.classList.remove('active'));
+const btn=document.querySelector(`[onclick="changeMusic('${key}')"]`);
+if(btn)btn.classList.add('active');
 }
 
-// 🎧 曲切替
+// 曲切替
 async function changeMusic(key){
 const next=musicData[key];
-if(!next) return;
-if(currentKey===key) return;
+if(!next)return;
+if(currentKey===key)return;
 
 await fadeOut(currentAudio);
 
-document.getElementById('p-art').src=next.img;
-document.getElementById('p-title').innerText='NOW: '+next.title;
+get('p-art').src=next.img;
+get('p-title').innerText='NOW: '+next.title;
 
 fadeIn(next.audio);
 
@@ -168,7 +196,7 @@ currentKey=key;
 updateActiveButton(key);
 }
 
-// 初期表示
+// 初期
 window.addEventListener('load',()=>{
 changeMusic('rino');
 });
@@ -179,6 +207,7 @@ if(currentAudio && currentAudio.paused){
 currentAudio.play().catch(()=>{});
 }
 },{once:true});
+
 </script>
 
 </body>
